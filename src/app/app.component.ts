@@ -18,36 +18,71 @@ export class AppComponent implements OnInit {
       height: 600
     });
 
-    // Create an actor with x position of 150px,
-    // y position of 40px from the bottom of the screen,
-    // width of 200px, height and a height of 20px
-    //
-
-    const paddle = this.createPaddle(game.getHeight()); //new ex.Actor(150, game.getHeight() - 40, 200, 20);
-
-/*    // Let's give it some color with one of the predefined
-    // color constants
-    paddle.color = ex.Color.Chartreuse;
-
-    // Make sure the paddle can participate in collisions, by default excalibur actors do not collide
-    paddle.collisionType = ex.CollisionType.Fixed;*/
-
-    // `game.add` is the same as calling
-    // `game.currentScene.add`
+    // create the paddle
+    const paddle = this.createPaddle(game.getHeight());
     game.add(paddle);
 
-    // Add a mouse mov listener
+    // Add a mouse move listener that fallows the paddle in the X-direction
     game.input.pointers.primary.on('move', function (evt : any) {
       paddle.pos.x = evt.x;
     });
 
     // Create a ball
     let ball: ex.Actor = this.createBall( game.getWidth());
-
     // Add the ball to the current scene
     game.add(ball);
 
+    // Create the bricks
+
+    let bricks : ex.Actor[] = this.createBricks(game.getWidth());
+
+    // add the bricks to the game
+    bricks.forEach(brick =>{
+      // Make sure that bricks can participate in collisions
+      brick.collisionType = ex.CollisionType.Active;
+
+      // Add the brick to the current scene to be drawn
+      game.add(brick);
+    });
+
+    // On collision remove the brick
+    ball.on('collision', (ev: any) =>{
+      if (bricks.indexOf(ev.other) > -1) {
+        // kill removes an actor from the current scene
+        // therefore it will no longer be drawn or updated
+        ev.other.kill();
+      }
+    });
+
+    // if the ball leaves the screen, the player loses
+    ball.on('exitviewport', () =>{
+      alert('You lose!');
+    });
+
     game.start();
+  }
+
+  private createBricks(gameWidth : number) : ex.Actor[] {
+
+    const padding = 20; // px
+    const xoffset = 65; // x-offset
+    const yoffset = 20; // y-offset
+    const columns = 5;
+    const rows = 3;
+
+    const brickColor : ex.Color[] = [ex.Color.Violet, ex.Color.Orange, ex.Color.Yellow];
+
+    let bricks : ex.Actor[] = [];
+
+    const brickWidth = gameWidth / columns - padding - padding/columns; // px
+    const brickHeight = 30; // px
+
+    for (let j = 0; j < rows; j++) {
+      for (let i = 0; i < columns; i++) {
+        bricks.push(new ex.Actor(xoffset + i * (brickWidth + padding) + padding, yoffset + j * (brickHeight + padding) + padding, brickWidth, brickHeight, brickColor[j % brickColor.length]));
+      }
+    }
+    return bricks;
   }
 
   private createPaddle(gameHeight : number) : ex.Actor {
