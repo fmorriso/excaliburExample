@@ -1,6 +1,9 @@
 # ExcaliburExample
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0-rc.2.
+This project was generated with:
+* [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0-rc.2.
+* [Angular](https://angular.io/) version 2.4.10
+* [WebStorm](http://www.jetbrains.com/webstorm) version 2017.1
 
 ## Excalibur TypeScript Gaming 
 [Excalibur](https://excaliburjs.com/)
