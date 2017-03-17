@@ -6,7 +6,7 @@
     "callable-types": true,
     "class-name": true,
     "comment-format": [
-      true,
+      false,
       "check-space"
     ],
     "curly": true,
@@ -63,7 +63,7 @@
       "check-else",
       "check-whitespace"
     ],
-    "prefer-const": true,
+    "prefer-const": false,
     "quotemark": [
       false,
       "single"
