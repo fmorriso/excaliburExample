@@ -13,13 +13,11 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     const game = new ex.Engine({
-      canvasElementId: 'game',
-      width: 800,
-      height: 600
+      canvasElementId: 'game'
     });
 
     // create the paddle
-    const paddle = this.createPaddle(game.getHeight());
+    const paddle = this.createPaddle(game.getDrawHeight());
     game.add(paddle);
 
     // Add a mouse move listener that fallows the paddle in the X-direction
@@ -28,13 +26,12 @@ export class AppComponent implements OnInit {
     });
 
     // Create a ball
-    let ball: ex.Actor = this.createBall( game.getWidth());
+    let ball: ex.Actor = this.createBall( game.getDrawWidth());
     // Add the ball to the current scene
     game.add(ball);
 
     // Create the bricks
-
-    let bricks : ex.Actor[] = this.createBricks(game.getWidth());
+    let bricks : ex.Actor[] = this.createBricks(game.getDrawWidth());
 
     // add the bricks to the game
     bricks.forEach(brick =>{
@@ -67,7 +64,7 @@ export class AppComponent implements OnInit {
     const padding = 20; // px
     const xoffset = 65; // x-offset
     const yoffset = 20; // y-offset
-    const columns = 5;
+    const columns = 6;
     const rows = 3;
 
     const brickColor : ex.Color[] = [ex.Color.Violet, ex.Color.Orange, ex.Color.Yellow];
