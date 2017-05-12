@@ -86,11 +86,12 @@ export class AppComponent implements OnInit {
   }
 
   private createPaddle(gameHeight : number) : ex.Actor {
+
     const paddle = new ex.Actor(150, gameHeight - 40, 200, 20);
 
     // Let's give it some color with one of the predefined
     // color constants
-    paddle.color = ex.Color.Chartreuse;
+    paddle.color = ex.Color.Vermillion;
 
     // Make sure the paddle can participate in collisions, by default excalibur actors do not collide
     paddle.collisionType = ex.CollisionType.Fixed;
@@ -106,7 +107,7 @@ export class AppComponent implements OnInit {
     ball.color = ex.Color.Red;
 
     // Set the velocity in pixels per second
-    ball.vel.setTo(101, 101);
+    ball.vel.setTo(121, 121);
 
     // Set the collision Type to elastic
     ball.collisionType = ex.CollisionType.Elastic;
