@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, VERSION} from '@angular/core';
 import * as ex from 'excalibur';
 
 @Component({
@@ -8,10 +8,13 @@ import * as ex from 'excalibur';
 })
 export class AppComponent implements OnInit {
 
+  angularVersion: string;
+
   constructor() {
   }
 
   ngOnInit() {
+    this.angularVersion = VERSION.full;
     const game = new ex.Engine({
       canvasElementId: 'game'
     });
@@ -65,7 +68,7 @@ export class AppComponent implements OnInit {
     const xoffset = 65; // x-offset
     const yoffset = 20; // y-offset
     const columns = 6;
-    const rows = 3;
+    const rows = 4;
 
     const brickColor : ex.Color[] = [ex.Color.Violet, ex.Color.Orange, ex.Color.Yellow];
 
