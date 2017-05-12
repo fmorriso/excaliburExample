@@ -70,7 +70,7 @@ export class AppComponent implements OnInit {
     const columns = 6;
     const rows = 4;
 
-    const brickColor : ex.Color[] = [ex.Color.Violet, ex.Color.Orange, ex.Color.Yellow];
+    const brickColor : ex.Color[] = [ex.Color.Violet, ex.Color.Orange, ex.Color.Yellow, ex.Color.Rose];
 
     let bricks : ex.Actor[] = [];
 
