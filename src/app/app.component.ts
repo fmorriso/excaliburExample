@@ -9,12 +9,14 @@ import * as ex from 'excalibur';
 export class AppComponent implements OnInit {
 
   angularVersion: string;
+  visibleBricks: number = 0;
 
   constructor() {
   }
 
   ngOnInit() {
     this.angularVersion = VERSION.full;
+
     const game = new ex.Engine({
       canvasElementId: 'game'
     });
@@ -35,6 +37,7 @@ export class AppComponent implements OnInit {
 
     // Create the bricks
     let bricks : ex.Actor[] = this.createBricks(game.getDrawWidth());
+    this.visibleBricks = bricks.length;
 
     // add the bricks to the game
     bricks.forEach(brick =>{
@@ -51,11 +54,18 @@ export class AppComponent implements OnInit {
         // kill removes an actor from the current scene
         // therefore it will no longer be drawn or updated
         ev.other.kill();
+        this.visibleBricks--;
+        console.log(`There are ${this.visibleBricks} bricks left`);
+        if(this.visibleBricks === 0){
+          game.stop();
+          alert('You won!');
+        }
       }
     });
 
     // if the ball leaves the screen, the player loses
     ball.on('exitviewport', () =>{
+      game.stop();
       alert('You lose!');
     });
 
@@ -67,8 +77,8 @@ export class AppComponent implements OnInit {
     const padding = 20; // px
     const xoffset = 65; // x-offset
     const yoffset = 20; // y-offset
-    const columns = 6;
-    const rows = 4;
+    const columns = 8;
+    const rows = 3;
 
     const brickColor : ex.Color[] = [ex.Color.Violet, ex.Color.Orange, ex.Color.Yellow, ex.Color.Rose];
 
@@ -79,7 +89,8 @@ export class AppComponent implements OnInit {
 
     for (let j = 0; j < rows; j++) {
       for (let i = 0; i < columns; i++) {
-        bricks.push(new ex.Actor(xoffset + i * (brickWidth + padding) + padding, yoffset + j * (brickHeight + padding) + padding, brickWidth, brickHeight, brickColor[j % brickColor.length]));
+        let brick = new ex.Actor(xoffset + i * (brickWidth + padding) + padding, yoffset + j * (brickHeight + padding) + padding, brickWidth, brickHeight, brickColor[j % brickColor.length]);
+        bricks.push(brick);
       }
     }
     return bricks;
