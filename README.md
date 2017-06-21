@@ -1,10 +1,10 @@
 # ExcaliburExample
 
 This project was generated with:
-* [Angular CLI](https://github.com/angular/angular-cli) version 1.0.4
-* [Angular](https://angular.io/) version 4.1.3
-* [WebStorm](http://www.jetbrains.com/webstorm) version 2017.2
-* TypeScript 2.3.3
+* [Angular CLI](https://github.com/angular/angular-cli) version 1.1.2
+* [Angular](https://angular.io/) version 4.2.3
+* [WebStorm](http://www.jetbrains.com/webstorm) version 2017.2 EAP
+* TypeScript 2.3.4
 
 ## Excalibur TypeScript Gaming 
 [Excalibur](https://excaliburjs.com/)
