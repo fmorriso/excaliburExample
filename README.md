@@ -4,7 +4,7 @@ This project was generated with:
 * [Angular CLI](https://github.com/angular/angular-cli) version 7.3.1
 * [Angular](https://angular.io/) version 7.2.5
 * [WebStorm](http://www.jetbrains.com/webstorm) version 2018.3.4
-* [ExcaliburJS](https://excaliburjs.com) version 0.11.0
+* [ExcaliburJS](https://excaliburjs.com) version 0.21.0
 * [TypeScript](https://www.typescriptlang.org/) version 3.2.4
 
 ## Excalibur TypeScript Gaming 
