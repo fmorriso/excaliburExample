@@ -25,3 +25,41 @@ JRE: 1.8.0_152-release-1343-b26 amd64
 JVM: OpenJDK 64-Bit Server VM by JetBrains s.r.o
 Windows 10 10.0
 ```
+
+## Angular / Angular-CLI version details
+```
+
+     _                      _                 ____ _     ___
+    / \   _ __   __ _ _   _| | __ _ _ __     / ___| |   |_ _|
+   / Γû│ \ | '_ \ / _` | | | | |/ _` | '__|   | |   | |    | |
+  / ___ \| | | | (_| | |_| | | (_| | |      | |___| |___ | |
+ /_/   \_\_| |_|\__, |\__,_|_|\__,_|_|       \____|_____|___|
+                |___/
+    
+
+Angular CLI: 7.3.1
+Node: 10.15.0
+OS: win32 x64
+Angular: 7.2.5
+... common, compiler, compiler-cli, core, forms, http
+... platform-browser, platform-browser-dynamic, router
+
+Package                           Version
+-----------------------------------------------------------
+@angular-devkit/architect         0.13.1
+@angular-devkit/build-angular     0.13.1
+@angular-devkit/build-optimizer   0.13.1
+@angular-devkit/build-webpack     0.13.1
+@angular-devkit/core              7.3.1
+@angular-devkit/schematics        7.3.1
+@angular/cli                      7.3.1
+@ngtools/webpack                  7.3.1
+@schematics/angular               7.3.1
+@schematics/update                0.13.1
+rxjs                              6.4.0
+typescript                        3.2.4
+webpack                           4.29.0
+    
+
+```
+```
