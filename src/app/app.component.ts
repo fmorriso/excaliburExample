@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
     game.add(ball);
 
     // Create the bricks
-    let bricks : ex.Actor[] = this.createBricks(game.drawWidth);
+    let bricks : ex.Actor[] = this.createBricks(game);
     this.visibleBricks = bricks.length;
 
     // add the bricks to the game
@@ -48,31 +48,32 @@ export class AppComponent implements OnInit {
       game.add(brick);
     });
 
-    // On collision remove the brick
-    ball.on('collision', (ev: any) =>{
+// On collision remove the brick, bounce the ball
+    ball.on('precollision', function(ev) {
       if (bricks.indexOf(ev.other) > -1) {
         // kill removes an actor from the current scene
         // therefore it will no longer be drawn or updated
-        ev.other.kill();
-        this.visibleBricks--;
-        console.log(`There are ${this.visibleBricks} bricks left`);
-        if(this.visibleBricks === 0){
-          game.stop();
-          alert('You won!');
-        }
+        ev.other.kill()
       }
-    });
 
-    // if the ball leaves the screen, the player loses
-    ball.on('exitviewport', () =>{
-      game.stop();
-      alert('You lose!');
+      // reverse course after any collision
+      // intersections are the direction body A has to move to not be clipping body B
+      // `ev.intersection` is a vector `normalize()` will make the length of it 1
+      // `negate()` flips the direction of the vector
+      const intersection = ev.intersection.normalize()
+
+      // The largest component of intersection is our axis to flip
+      if (Math.abs(intersection.x) > Math.abs(intersection.y)) {
+        ball.vel.x *= -1
+      } else {
+        ball.vel.y *= -1
+      }
     });
 
     game.start();
   }
 
-  private createBricks(gameWidth : number) : ex.Actor[] {
+  private createBricks(game: ex.Engine) : ex.Actor[] {
 
     const padding = 20; // px
     const xoffset = 65; // x-offset
@@ -81,18 +82,24 @@ export class AppComponent implements OnInit {
     const rows = 3;
 
     const brickColor : ex.Color[] = [ex.Color.Violet, ex.Color.Orange, ex.Color.Yellow, ex.Color.Rose];
-
-    let bricks : ex.Actor[] = [];
-
-    const brickWidth = gameWidth / columns - padding - padding/columns; // px
+    const brickWidth = game.drawWidth / columns - padding - padding / columns; // px
     const brickHeight = 30; // px
 
+    let bricks : ex.Actor[] = [];
     for (let j = 0; j < rows; j++) {
       for (let i = 0; i < columns; i++) {
-        let brick = new ex.Actor(xoffset + i * (brickWidth + padding) + padding, yoffset + j * (brickHeight + padding) + padding, brickWidth, brickHeight, brickColor[j % brickColor.length]);
+        let brick = new ex.Actor(
+            xoffset + i * (brickWidth + padding) + padding,
+            yoffset + j * (brickHeight + padding) + padding,
+            brickWidth,
+            brickHeight,
+            brickColor[j % brickColor.length]
+        );
         bricks.push(brick);
       }
     }
+
+
     return bricks;
   }
 
@@ -124,22 +131,6 @@ export class AppComponent implements OnInit {
     // This means "tell me when I collide with an emitted event, but don't let excalibur do anything automatically"
     ball.collisionType = ex.CollisionType.Passive;
 
-    // On collision bounce the ball
-    ball.on('precollision', function(ev) {
-      // reverse course after any collision
-      // intersections are the direction body A has to move to not be clipping body B
-      // `ev.intersection` is a vector `normalize()` will make the length of it 1
-      // `negate()` flips the direction of the vector
-      const intersection = ev.intersection.normalize()
-
-      // The largest component of intersection is our axis to flip
-      if (Math.abs(intersection.x) > Math.abs(intersection.y)) {
-        ball.vel.x *= -1
-      } else {
-        ball.vel.y *= -1
-      }
-    })
-
     // Make the "ball" round
     // NOTE: Draw is passed a rendering context and a delta in milliseconds since the last frame
     ball.draw = drawBall;
@@ -157,7 +148,7 @@ export class AppComponent implements OnInit {
     }
 
     // keep the ball from leaving the game on the far left or far right
-// Wire up to the postupdate event
+    // Wire up to the postupdate event
     ball.on('postupdate', function() {
       // If the ball collides with the left side
       // of the screen reverse the x velocity
@@ -176,7 +167,15 @@ export class AppComponent implements OnInit {
       if (this.pos.y < this.getHeight() / 2) {
         this.vel.y *= -1
       }
-    })
+    });
+
+
+
+    // if the ball leaves the screen, the player loses
+    ball.on('exitviewport', () =>{
+      game.stop();
+      alert('You lose!');
+    });
 
     return ball;
   }
