@@ -4,6 +4,7 @@
 dist
 dist/
 dist/*
+/dist
 /tmp
 /out-tsc
 
