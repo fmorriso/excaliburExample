@@ -5,7 +5,7 @@ This project was generated with:
 * [Angular](https://angular.io/) version 7.2.5
 * [WebStorm](http://www.jetbrains.com/webstorm) version 2018.3.4
 * [ExcaliburJS](https://excaliburjs.com) version 0.11.0
-* [TypeScript] (https://www.typescriptlang.org/) version 3.2.4
+* [TypeScript](https://www.typescriptlang.org/) version 3.2.4
 
 ## Excalibur TypeScript Gaming 
 [Excalibur](https://excaliburjs.com/)
