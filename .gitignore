@@ -3,7 +3,7 @@
 # compiled output
 dist
 dist/
-dist/*
+dist/*.js
 /dist
 **/dist/
 /tmp
