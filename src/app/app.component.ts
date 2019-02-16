@@ -1,6 +1,6 @@
 import {Component, OnInit, VERSION} from '@angular/core';
 import * as ex from 'excalibur';
-
+// https://excaliburjs.com/docs/getting-started
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,7 +9,7 @@ import * as ex from 'excalibur';
 export class AppComponent implements OnInit {
 
   angularVersion: string;
-  visibleBricks: number = 0;
+  visibleBricks = 0;
 
   constructor() {
   }
@@ -17,26 +17,26 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.angularVersion = VERSION.full;
 
-    const game = new ex.Engine({
+    const game : ex.Engine = new ex.Engine({
       canvasElementId: 'game'
     });
 
-    // create the paddle
-    const paddle = this.createPaddle(game.getDrawHeight());
+    // create the paddle;
+    const paddle = this.createPaddle(game.drawHeight);
     game.add(paddle);
 
     // Add a mouse move listener that fallows the paddle in the X-direction
     game.input.pointers.primary.on('move', function (evt : any) {
-      paddle.pos.x = evt.x;
+      paddle.pos.x = evt.worldPos.x;
     });
 
     // Create a ball
-    let ball: ex.Actor = this.createBall( game.getDrawWidth());
+    let ball: ex.Actor = this.createBall( game);
     // Add the ball to the current scene
     game.add(ball);
 
     // Create the bricks
-    let bricks : ex.Actor[] = this.createBricks(game.getDrawWidth());
+    let bricks : ex.Actor[] = this.createBricks(game.drawWidth);
     this.visibleBricks = bricks.length;
 
     // add the bricks to the game
@@ -110,7 +110,7 @@ export class AppComponent implements OnInit {
     return paddle;
   }
 
-  private createBall(gameWidth: number) : ex.Actor{
+  private createBall(game: ex.Engine) : ex.Actor{
 
     let ball: ex.Actor = new ex.Actor(100, 300, 20, 20);
 
@@ -118,10 +118,27 @@ export class AppComponent implements OnInit {
     ball.color = ex.Color.Red;
 
     // Set the velocity in pixels per second
-    ball.vel.setTo(121, 121);
+    ball.vel.setTo(100, 100);
 
-    // Set the collision Type to elastic
-    ball.collisionType = ex.CollisionType.Elastic;
+    // Set the collision Type to passive
+    // This means "tell me when I collide with an emitted event, but don't let excalibur do anything automatically"
+    ball.collisionType = ex.CollisionType.Passive;
+
+    // On collision bounce the ball
+    ball.on('precollision', function(ev) {
+      // reverse course after any collision
+      // intersections are the direction body A has to move to not be clipping body B
+      // `ev.intersection` is a vector `normalize()` will make the length of it 1
+      // `negate()` flips the direction of the vector
+      const intersection = ev.intersection.normalize()
+
+      // The largest component of intersection is our axis to flip
+      if (Math.abs(intersection.x) > Math.abs(intersection.y)) {
+        ball.vel.x *= -1
+      } else {
+        ball.vel.y *= -1
+      }
+    })
 
     // Make the "ball" round
     // NOTE: Draw is passed a rendering context and a delta in milliseconds since the last frame
@@ -139,26 +156,27 @@ export class AppComponent implements OnInit {
       ctx.fill();
     }
 
-    // keep the ball within the game
-    ball.on('update', function () {
+    // keep the ball from leaving the game on the far left or far right
+// Wire up to the postupdate event
+    ball.on('postupdate', function() {
       // If the ball collides with the left side
       // of the screen reverse the x velocity
-      if (this.pos.x < (this.getWidth() / 2)) {
-        this.vel.x *= -1;
+      if (this.pos.x < this.getWidth() / 2) {
+        this.vel.x *= -1
       }
 
       // If the ball collides with the right side
       // of the screen reverse the x velocity
-      if (this.pos.x + (this.getWidth() / 2) > gameWidth) {
-        this.vel.x *= -1;
+      if (this.pos.x + this.getWidth() / 2 > game.drawWidth) {
+        this.vel.x *= -1
       }
 
       // If the ball collides with the top
       // of the screen reverse the y velocity
-      if (this.pos.y < 0) {
-        this.vel.y *= -1;
+      if (this.pos.y < this.getHeight() / 2) {
+        this.vel.y *= -1
       }
-    });
+    })
 
     return ball;
   }
