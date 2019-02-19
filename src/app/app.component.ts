@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
     const paddle = this.createPaddle(game.drawHeight);
     game.add(paddle);
 
-    // Add a mouse move listener that fallows the paddle in the X-direction
+    // Add a mouse move listener that follows the paddle in the X-direction
     game.input.pointers.primary.on('move', function (evt : any) {
       paddle.pos.x = evt.worldPos.x;
     });
@@ -119,13 +119,17 @@ export class AppComponent implements OnInit {
 
   private createBall(game: ex.Engine) : ex.Actor{
 
-    let ball: ex.Actor = new ex.Actor(100, 300, 20, 20);
+    const velocity = 200; // pixels per second
+    const radius = 15;
+    const diameter = radius * 2;
+
+    let ball: ex.Actor = new ex.Actor(100, 300, diameter, diameter);
 
     // Set the color
     ball.color = ex.Color.Red;
 
     // Set the velocity in pixels per second
-    ball.vel.setTo(100, 100);
+    ball.vel.setTo(velocity, velocity);
 
     // Set the collision Type to passive
     // This means "tell me when I collide with an emitted event, but don't let excalibur do anything automatically"
@@ -142,7 +146,7 @@ export class AppComponent implements OnInit {
       // Custom draw code
       ctx.fillStyle = this.color.toString();
       ctx.beginPath();
-      ctx.arc(this.pos.x, this.pos.y, 10, 0, Math.PI * 2);
+      ctx.arc(this.pos.x, this.pos.y, radius, 0, Math.PI * 2);
       ctx.closePath();
       ctx.fill();
     }
