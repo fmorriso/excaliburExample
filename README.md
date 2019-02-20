@@ -1,8 +1,8 @@
 # ExcaliburExample
 
 This project was generated with:
-* [Angular CLI](https://github.com/angular/angular-cli) version 7.3.1
-* [Angular](https://angular.io/) version 7.2.5
+* [Angular CLI](https://github.com/angular/angular-cli) version 7.3.2
+* [Angular](https://angular.io/) version 7.2.6
 * [WebStorm](http://www.jetbrains.com/webstorm) version 2018.3.4
 * [ExcaliburJS](https://excaliburjs.com) version 0.21.0
 * [TypeScript](https://www.typescriptlang.org/) version 3.2.4
@@ -37,12 +37,12 @@ Windows 10 10.0
                 |___/
     
 
-Angular CLI: 7.3.1
+Angular CLI: 7.3.2
 Node: 10.15.0
 OS: win32 x64
-Angular: 7.2.5
-... common, compiler, compiler-cli, core, forms, http
-... platform-browser, platform-browser-dynamic, router
+Angular: 7.2.6
+... animations, common, compiler, compiler-cli, core, forms
+... http, platform-browser, platform-browser-dynamic, router
 
 Package                           Version
 -----------------------------------------------------------
@@ -51,15 +51,15 @@ Package                           Version
 @angular-devkit/build-optimizer   0.13.1
 @angular-devkit/build-webpack     0.13.1
 @angular-devkit/core              7.3.1
-@angular-devkit/schematics        7.3.1
-@angular/cli                      7.3.1
+@angular-devkit/schematics        7.3.2
+@angular/cdk                      7.3.2
+@angular/cli                      7.3.2
+@angular/flex-layout              7.0.0-beta.23
+@angular/material                 7.3.2
 @ngtools/webpack                  7.3.1
-@schematics/angular               7.3.1
-@schematics/update                0.13.1
+@schematics/angular               7.3.2
+@schematics/update                0.13.2
 rxjs                              6.4.0
 typescript                        3.2.4
 webpack                           4.29.0
-    
-
-```
 ```
