@@ -4,9 +4,7 @@ import { PointerMoveEvent } from 'excalibur/dist/Input';
 import {
   PreCollisionEvent,
   PostUpdateEvent,
-  ExitViewPortEvent,
-  ConsoleAppender,
-  Logger
+  ExitViewPortEvent
 } from 'excalibur';
 // https://excaliburjs.com/docs/getting-started
 // https://excaliburjs.com/docs/api/edge/
