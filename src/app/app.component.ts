@@ -1,4 +1,4 @@
-import { Component, OnInit, VERSION } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as ex from 'excalibur';
 import { PointerMoveEvent } from 'excalibur/dist/Input';
 import {
@@ -6,6 +6,8 @@ import {
   PostUpdateEvent,
   ExitViewPortEvent
 } from 'excalibur';
+import { AngularVersionInformationService } from './shared/angular-version-information.service';
+import { MaterialVersionInformationService } from './shared/material-version-information.service';
 // https://excaliburjs.com/docs/getting-started
 // https://excaliburjs.com/docs/api/edge/
 @Component({
@@ -15,16 +17,21 @@ import {
 })
 export class AppComponent implements OnInit {
   angularVersion: string;
+  materialVersion: string;
   visibleBricks = 0;
   logger: ex.Logger;
 
-  constructor() {
+  constructor(
+    private ngVersion: AngularVersionInformationService,
+    private matVersion: MaterialVersionInformationService) {
     this.logger = ex.Logger.getInstance();
     this.logger.defaultLevel = ex.LogLevel.Debug;
   }
 
   ngOnInit() {
-    this.angularVersion = VERSION.full;
+    this.angularVersion = this.ngVersion.versionFull;
+    this.materialVersion = this.matVersion.versionFull;
+    
     //console.log('ngOnInit via console.log');
     this.logger.debug('ngOnInit via logger.debug');
     const game: ex.Engine = new ex.Engine({
