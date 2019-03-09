@@ -1,6 +1,13 @@
 import { Component, OnInit, VERSION } from '@angular/core';
 import * as ex from 'excalibur';
+import { PointerMoveEvent } from 'excalibur/dist/Input';
+import {
+  PreCollisionEvent,
+  PostUpdateEvent,
+  ExitViewPortEvent
+} from 'excalibur';
 // https://excaliburjs.com/docs/getting-started
+// https://excaliburjs.com/docs/api/edge/
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -24,7 +31,7 @@ export class AppComponent implements OnInit {
     game.add(paddle);
 
     // Add a mouse move listener that follows the paddle in the X-direction
-    game.input.pointers.primary.on('move', function(evt: any) {
+    game.input.pointers.primary.on('move', function(evt: PointerMoveEvent) {
       paddle.pos.x = evt.worldPos.x;
     });
 
@@ -47,7 +54,8 @@ export class AppComponent implements OnInit {
     });
 
     // On collision remove the brick, bounce the ball
-    ball.on('precollision', function(ev) {
+    // https://excaliburjs.com/docs/api/edge/classes/_events_.precollisionevent.html
+    ball.on('precollision', function(ev: PreCollisionEvent) {
       if (bricks.indexOf(ev.other) > -1) {
         // kill removes an actor from the current scene
         // therefore it will no longer be drawn or updated
@@ -137,9 +145,10 @@ export class AppComponent implements OnInit {
 
     // Make the "ball" round
     // NOTE: Draw is passed a rendering context and a delta in milliseconds since the last frame
+    // https://excaliburjs.com/docs/api/edge/classes/_drawing_animation_.animation.html#draw
     ball.draw = drawBall;
 
-    function drawBall(ctx, delta) {
+    function drawBall(ctx: CanvasRenderingContext2D, delta) {
       // Optionally call original 'base' method
       // ex.Actor.prototype.draw.call(this, ctx, delta)
 
@@ -153,7 +162,8 @@ export class AppComponent implements OnInit {
 
     // keep the ball from leaving the game on the far left or far right
     // Wire up to the postupdate event
-    ball.on('postupdate', function() {
+    // https://excaliburjs.com/docs/api/edge/classes/_events_.postupdateevent.html
+    ball.on('postupdate', function(evt: PostUpdateEvent) {
       // If the ball collides with the left side
       // of the screen reverse the x velocity
       if (this.pos.x < this.getWidth() / 2) {
@@ -168,13 +178,13 @@ export class AppComponent implements OnInit {
 
       // If the ball collides with the top
       // of the screen reverse the y velocity
-      if (this.pos.y < this.getHeight() / 2) {
+      else if (this.pos.y < this.getHeight() / 2) {
         this.vel.y *= -1;
       }
     });
 
     // if the ball leaves the screen, the player loses
-    ball.on('exitviewport', () => {
+    ball.on('exitviewport', (evt: ExitViewPortEvent) => {
       game.stop();
       alert('You lose!');
     });
