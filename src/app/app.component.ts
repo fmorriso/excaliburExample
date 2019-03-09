@@ -1,4 +1,4 @@
-import {Component, OnInit, VERSION} from '@angular/core';
+import { Component, OnInit, VERSION } from '@angular/core';
 import * as ex from 'excalibur';
 // https://excaliburjs.com/docs/getting-started
 @Component({
@@ -7,40 +7,38 @@ import * as ex from 'excalibur';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-
   angularVersion: string;
   visibleBricks = 0;
 
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit() {
     this.angularVersion = VERSION.full;
 
-    const game : ex.Engine = new ex.Engine({
+    const game: ex.Engine = new ex.Engine({
       canvasElementId: 'game'
     });
 
     // create the paddle;
-    const paddle = this.createPaddle(game.drawHeight);
+    const paddle: ex.Actor = this.createPaddle(game.drawHeight);
     game.add(paddle);
 
     // Add a mouse move listener that follows the paddle in the X-direction
-    game.input.pointers.primary.on('move', function (evt : any) {
+    game.input.pointers.primary.on('move', function(evt: any) {
       paddle.pos.x = evt.worldPos.x;
     });
 
     // Create a ball
-    let ball: ex.Actor = this.createBall( game);
+    let ball: ex.Actor = this.createBall(game);
     // Add the ball to the current scene
     game.add(ball);
 
     // Create the bricks
-    let bricks : ex.Actor[] = this.createBricks(game);
+    let bricks: ex.Actor[] = this.createBricks(game);
     this.visibleBricks = bricks.length;
 
     // add the bricks to the game
-    bricks.forEach(brick =>{
+    bricks.forEach(brick => {
       // Make sure that bricks can participate in collisions
       brick.collisionType = ex.CollisionType.Active;
 
@@ -48,64 +46,67 @@ export class AppComponent implements OnInit {
       game.add(brick);
     });
 
-// On collision remove the brick, bounce the ball
+    // On collision remove the brick, bounce the ball
     ball.on('precollision', function(ev) {
       if (bricks.indexOf(ev.other) > -1) {
         // kill removes an actor from the current scene
         // therefore it will no longer be drawn or updated
-        ev.other.kill()
+        ev.other.kill();
       }
 
       // reverse course after any collision
       // intersections are the direction body A has to move to not be clipping body B
       // `ev.intersection` is a vector `normalize()` will make the length of it 1
       // `negate()` flips the direction of the vector
-      const intersection = ev.intersection.normalize()
+      const intersection: ex.Vector = ev.intersection.normalize();
 
       // The largest component of intersection is our axis to flip
       if (Math.abs(intersection.x) > Math.abs(intersection.y)) {
-        ball.vel.x *= -1
+        ball.vel.x *= -1;
       } else {
-        ball.vel.y *= -1
+        ball.vel.y *= -1;
       }
     });
 
     game.start();
   }
 
-  private createBricks(game: ex.Engine) : ex.Actor[] {
-
+  private createBricks(game: ex.Engine): ex.Actor[] {
     const padding = 20; // px
     const xoffset = 65; // x-offset
     const yoffset = 20; // y-offset
     const columns = 8;
     const rows = 3;
 
-    const brickColor : ex.Color[] = [ex.Color.Violet, ex.Color.Orange, ex.Color.Yellow, ex.Color.Rose];
-    const brickWidth = game.drawWidth / columns - padding - padding / columns; // px
+    const brickColor: ex.Color[] = [
+      ex.Color.Violet,
+      ex.Color.Orange,
+      ex.Color.Yellow,
+      ex.Color.Rose
+    ];
+    const brickWidth: number =
+      game.drawWidth / columns - padding - padding / columns; // px
     const brickHeight = 30; // px
 
-    let bricks : ex.Actor[] = [];
+    let bricks: ex.Actor[] = [];
     for (let j = 0; j < rows; j++) {
       for (let i = 0; i < columns; i++) {
         let brick = new ex.Actor(
-            xoffset + i * (brickWidth + padding) + padding,
-            yoffset + j * (brickHeight + padding) + padding,
-            brickWidth,
-            brickHeight,
-            brickColor[j % brickColor.length]
+          xoffset + i * (brickWidth + padding) + padding,
+          yoffset + j * (brickHeight + padding) + padding,
+          brickWidth,
+          brickHeight,
+          brickColor[j % brickColor.length]
         );
         bricks.push(brick);
       }
     }
 
-
     return bricks;
   }
 
-  private createPaddle(gameHeight : number) : ex.Actor {
-
-    const paddle = new ex.Actor(150, gameHeight - 40, 200, 20);
+  private createPaddle(gameHeight: number): ex.Actor {
+    const paddle: ex.Actor = new ex.Actor(150, gameHeight - 40, 200, 20);
 
     // Let's give it some color with one of the predefined
     // color constants
@@ -117,11 +118,10 @@ export class AppComponent implements OnInit {
     return paddle;
   }
 
-  private createBall(game: ex.Engine) : ex.Actor{
-
+  private createBall(game: ex.Engine): ex.Actor {
     const velocity = 200; // pixels per second
     const radius = 15;
-    const diameter = radius * 2;
+    const diameter: number = radius * 2;
 
     let ball: ex.Actor = new ex.Actor(100, 300, diameter, diameter);
 
@@ -157,26 +157,24 @@ export class AppComponent implements OnInit {
       // If the ball collides with the left side
       // of the screen reverse the x velocity
       if (this.pos.x < this.getWidth() / 2) {
-        this.vel.x *= -1
+        this.vel.x *= -1;
       }
 
       // If the ball collides with the right side
       // of the screen reverse the x velocity
       if (this.pos.x + this.getWidth() / 2 > game.drawWidth) {
-        this.vel.x *= -1
+        this.vel.x *= -1;
       }
 
       // If the ball collides with the top
       // of the screen reverse the y velocity
       if (this.pos.y < this.getHeight() / 2) {
-        this.vel.y *= -1
+        this.vel.y *= -1;
       }
     });
 
-
-
     // if the ball leaves the screen, the player loses
-    ball.on('exitviewport', () =>{
+    ball.on('exitviewport', () => {
       game.stop();
       alert('You lose!');
     });
