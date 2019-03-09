@@ -4,7 +4,9 @@ import { PointerMoveEvent } from 'excalibur/dist/Input';
 import {
   PreCollisionEvent,
   PostUpdateEvent,
-  ExitViewPortEvent
+  ExitViewPortEvent,
+  ConsoleAppender,
+  Logger
 } from 'excalibur';
 // https://excaliburjs.com/docs/getting-started
 // https://excaliburjs.com/docs/api/edge/
@@ -16,16 +18,21 @@ import {
 export class AppComponent implements OnInit {
   angularVersion: string;
   visibleBricks = 0;
+  logger: ex.Logger;
 
-  constructor() {}
+  constructor() {
+    this.logger = ex.Logger.getInstance();
+    this.logger.defaultLevel = ex.LogLevel.Debug;
+  }
 
   ngOnInit() {
     this.angularVersion = VERSION.full;
-
+    //console.log('ngOnInit via console.log');
+    this.logger.debug('ngOnInit via logger.debug');
     const game: ex.Engine = new ex.Engine({
       canvasElementId: 'game'
     });
-
+    ex.Logger.getInstance();
     // create the paddle;
     const paddle: ex.Actor = this.createPaddle(game.drawHeight);
     game.add(paddle);
@@ -57,6 +64,9 @@ export class AppComponent implements OnInit {
     // https://excaliburjs.com/docs/api/edge/classes/_events_.precollisionevent.html
     ball.on('precollision', function(ev: PreCollisionEvent) {
       if (bricks.indexOf(ev.other) > -1) {
+        this.logger.debug(
+          `Hit brick with index of ${bricks.indexOf(ev.other)}`
+        );
         // kill removes an actor from the current scene
         // therefore it will no longer be drawn or updated
         ev.other.kill();
@@ -80,6 +90,7 @@ export class AppComponent implements OnInit {
   }
 
   private createBricks(game: ex.Engine): ex.Actor[] {
+    this.logger.debug('creating bricks');
     const padding = 20; // px
     const xoffset = 65; // x-offset
     const yoffset = 20; // y-offset
@@ -114,6 +125,7 @@ export class AppComponent implements OnInit {
   }
 
   private createPaddle(gameHeight: number): ex.Actor {
+    this.logger.debug('creating paddle');
     const paddle: ex.Actor = new ex.Actor(150, gameHeight - 40, 200, 20);
 
     // Let's give it some color with one of the predefined
@@ -127,6 +139,7 @@ export class AppComponent implements OnInit {
   }
 
   private createBall(game: ex.Engine): ex.Actor {
+    this.logger.debug('creating ball');
     const velocity = 200; // pixels per second
     const radius = 15;
     const diameter: number = radius * 2;
@@ -148,12 +161,12 @@ export class AppComponent implements OnInit {
     // https://excaliburjs.com/docs/api/edge/classes/_drawing_animation_.animation.html#draw
     ball.draw = drawBall;
 
-    function drawBall(ctx: CanvasRenderingContext2D, delta) {
+    function drawBall(ctx: CanvasRenderingContext2D, delta: number) {
       // Optionally call original 'base' method
       // ex.Actor.prototype.draw.call(this, ctx, delta)
 
       // Custom draw code
-      ctx.fillStyle = this.color.toString();
+      ctx.fillStyle = (<ex.Actor>this).color.toString();
       ctx.beginPath();
       ctx.arc(this.pos.x, this.pos.y, radius, 0, Math.PI * 2);
       ctx.closePath();
